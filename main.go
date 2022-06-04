@@ -25,6 +25,8 @@ type ColourMessage struct {
 const logFileName string = "messages.txt"
 
 func tomHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	switch r.Method {
 	case "GET":
 		msg, err := readLastLogLine()
@@ -49,6 +51,8 @@ func tomHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		jsonMessage, _ := json.Marshal(colourMessage)
 		w.Write(jsonMessage)
+	case "OPTIONS":
+		return
 	default:
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 	}

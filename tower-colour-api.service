@@ -1,0 +1,10 @@
+[Unit]
+Description=Tower colour changer server
+
+[Service]
+Type=simple
+WorkingDirectory=%h/spacework/tower-colour-api
+ExecStart=%h/spacework/tower-colour-api/tower-colour-api
+
+[Install]
+WantedBy=default.target

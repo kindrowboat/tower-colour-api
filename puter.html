@@ -1,0 +1,91 @@
+<html>
+<head>
+<title>kindrobot</title>
+<style type="text/css">
+  body {
+    background-color: DarkSlateGray;
+    color: Gainsboro;
+    font-family: courier;
+    max-width: 650px;
+    margin-left: 100px;
+  }
+  a {
+    color: LightGray;
+  }
+  #title {
+    display: inline;
+  }
+</style>
+</head>
+<body>
+
+  <h1>'puter colour picker</h1>
+  <em>...change the colour of this computer.</em>
+
+  <form id="colour-change-form">
+    <input type="text" placeholder="red (0-255)" id="colour-change-red"/>
+    <input type="text" placeholder="green (0-255)" id="colour-change-green"/>
+    <input type="text" placeholder="blue (0-255)" id="colour-change-blue"/>
+    <input type="text" placeholder="a nice note" id="colour-change-note"/>
+    <input type="submit" id="colour-change-submit" value="Submit"/>
+  </form>
+  <img src="http://home.kindrobot.ca/puter_cam/lastsnap.jpg" alt="a computer with some colour" id="img-puter"/>
+
+
+  <script>
+  function reloadPuter() {
+      const img = document.getElementById('img-puter');
+      img.src = `http://home.kindrobot.ca/puter_cam/lastsnap.jpg?t=${new Date().getTime()}`;
+  }
+
+
+  document.addEventListener("DOMContentLoaded", (event) => {
+    reloadPuter();
+    const looper = setInterval(() => {
+      reloadPuter();
+    }, 15000);
+
+    const theForm = document.getElementById('colour-change-form');
+    theForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const red = parseInt(document.getElementById('colour-change-red').value);
+      const green = parseInt(document.getElementById('colour-change-green').value);
+      const blue = parseInt(document.getElementById('colour-change-blue').value);
+      const note = document.getElementById('colour-change-note').value;
+
+      if(isNaN(red) || red < 0 || red > 255){
+        alert("red needs to be a number between 0 and 255");
+        return;
+      }
+      if(isNaN(blue) || blue < 0 || blue > 255){
+        alert("blue needs to be a number between 0 and 255");
+        return;
+      }
+      if(isNaN(green) || green < 0 || green > 255){
+        alert("green needs to be a number between 0 and 255");
+        return;
+      }
+      if(!note || note == ""){
+        alert("please provide a note");
+        return;
+      }
+
+      const response = await fetch("https://chez.kindrobot.ca:3010/", {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {'Content-Type': 'application/json'},
+        redirect: 'follow',
+        body: JSON.stringify({
+          message: note, red, green, blue
+        })
+      });
+      const resultBody = await response.json();
+      console.log(resultBody);
+      alert("Thank you so much! Please stick around for about a minute to see your change.");
+      theForm.reset();
+
+    });
+  });
+  </script>
+</body>
+</html>
