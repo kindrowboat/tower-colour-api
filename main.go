@@ -22,7 +22,7 @@ type ColourMessage struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-const logFileName string = "messages.txt"
+var logFileName string = "messages.txt"
 
 func tomHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -186,6 +186,10 @@ func main() {
 		changeColour(byte(iRed), byte(iGreen), byte(iBlue))
 		return
 	}
+
+	if len(os.Args[1:]) == 1 {
+		logFileName = os.Args[1]
+	}	
 
 	http.HandleFunc("/", tomHandler)
 	addr := ":3010"
