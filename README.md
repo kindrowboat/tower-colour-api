@@ -3,6 +3,8 @@ Change the colour of a Dell G5 tower
 
 A cross platform CLI and web API for updating the LED colours of a Dell G5 tower.
 
+Example at [chez.kindrobot.ca/puter.html](https://chez.kindrobot.ca/puter.html).
+
 ## Installing
 Precompiled binaries are available on the releases page.
 
